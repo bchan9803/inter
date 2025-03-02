@@ -19,9 +19,7 @@ const SignupForm = () => {
 
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const signupWithEmailAndPassword = () => {
         setAuthing(true);
         setError("");
 
@@ -41,6 +39,12 @@ const SignupForm = () => {
                 setAuthing(false);
             });
         setAuthing(false);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        signupWithEmailAndPassword();
 
         console.log(`form data: ${email} and ${password}`);
     };
