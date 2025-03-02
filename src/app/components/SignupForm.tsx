@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "../../../firebase/firebaseConfig";
+// import { GoogleAuthProvider } from "firebase/auth/web-extension";
 
 /*
     Signup form is powered by firebase
@@ -19,7 +20,22 @@ const SignupForm = () => {
 
     const router = useRouter();
 
-    const signupWithEmailAndPassword = () => {
+    const signupWithGoogle = async () => {
+        setAuthing(true);
+
+        signInWithPopup(auth, new GoogleAuthProvider())
+            .then((res) => {
+                console.log(res.user.uid);
+                router.push("/");
+            })
+            .catch((err) => {
+                console.error(err);
+                // setError(err.message); 
+                setAuthing(false);
+            });
+    };
+
+    const signupWithEmailAndPassword = async () => {
         setAuthing(true);
         setError("");
 
@@ -34,7 +50,7 @@ const SignupForm = () => {
                 router.push("/");
             })
             .catch((err) => {
-                console.log(err);
+                console.error(err);
                 setError(err.message);
                 setAuthing(false);
             });
@@ -102,6 +118,18 @@ const SignupForm = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <br />
+
+            {/* 
+                Signup with Google btn
+            */}
+            <button
+                disabled={authing}
+                onClick={signupWithGoogle}
+                className="border-2 border-blue-500 rounded-md bg-slate-200 w-fit py-2 px-6 mx-auto font-semibold"
+            >
+                Sign Up with Google
+            </button>
+
             {/* 
                 Submit btn
             */}
