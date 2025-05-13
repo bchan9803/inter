@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Custom primary theme color (bg-sky-300)  */
+  --primaryThemeColor: oklch(0.828 0.111 230.318);
+}
+
 /* Box-sizing and padding reset */
 *,
 *::before,

@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import { auth } from "../../../firebase/firebaseConfig";
-// import { GoogleAuthProvider } from "firebase/auth/web-extension";
+// import {
+//     createUserWithEmailAndPassword,
+//     signInWithPopup,
+//     GoogleAuthProvider,
+// } from "firebase/auth";
+// import { useRouter } from "next/navigation";
+// import { auth } from "../../../firebase/firebaseConfig";
+import {
+    signInWithGoogle,
+    signUpWithEmailAndPassword,
+} from "../../../firebase/firebaseAuth";
 
 /*
     Signup form is powered by firebase
@@ -15,52 +22,15 @@ const SignupForm = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [authing, setAuthing] = useState(false);
-    const [error, setError] = useState("");
+    // const [authing, setAuthing] = useState(false);
+    // const [error, setError] = useState("");
 
-    const router = useRouter();
-
-    const signupWithGoogle = async () => {
-        setAuthing(true);
-
-        signInWithPopup(auth, new GoogleAuthProvider())
-            .then((res) => {
-                console.log(res.user.uid);
-                router.push("/");
-            })
-            .catch((err) => {
-                console.error(err);
-                // setError(err.message); 
-                setAuthing(false);
-            });
-    };
-
-    const signupWithEmailAndPassword = async () => {
-        setAuthing(true);
-        setError("");
-
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((res) => {
-                console.log(res.user.uid);
-                router.push("/");
-            })
-            .catch((err) => {
-                console.error(err);
-                setError(err.message);
-                setAuthing(false);
-            });
-        setAuthing(false);
-    };
+    // const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        signupWithEmailAndPassword();
+        signUpWithEmailAndPassword(email, password, confirmPassword);
 
         console.log(`form data: ${email} and ${password}`);
     };
@@ -118,18 +88,6 @@ const SignupForm = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <br />
-
-            {/* 
-                Signup with Google btn
-            */}
-            <button
-                disabled={authing}
-                onClick={signupWithGoogle}
-                className="border-2 border-blue-500 rounded-md bg-slate-200 w-fit py-2 px-6 mx-auto font-semibold"
-            >
-                Sign Up with Google
-            </button>
-
             {/* 
                 Submit btn
             */}
@@ -138,6 +96,16 @@ const SignupForm = () => {
                 className="border-2 border-blue-500 rounded-md bg-slate-200 w-fit py-2 px-6 mx-auto font-semibold"
             >
                 Submit
+            </button>
+            {/* 
+                Signup with Google btn
+            */}
+            <button
+                // disabled={authing}
+                onClick={signInWithGoogle}
+                className="border-2 border-blue-500 rounded-md bg-slate-200 w-fit py-2 px-6 mx-auto font-semibold"
+            >
+                Sign Up with Google
             </button>
         </form>
     );

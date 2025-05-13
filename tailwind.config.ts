@@ -12,6 +12,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'ptc': "var(--primaryThemeColor)"   // custom primary theme color (bg-sky-300)
       },
     },
   },
