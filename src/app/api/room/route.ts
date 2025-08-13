@@ -1,5 +1,4 @@
 import { NextResponse, NextRequest } from "next/server";
-// import NextCors from "nextjs-cors";
 import { prisma } from "../../../../lib/prisma";
 
 function addCorsHeaders(res: NextResponse) {
@@ -9,31 +8,32 @@ function addCorsHeaders(res: NextResponse) {
     return res
 }
 
+// GET: Find room
 export async function GET(req: NextRequest) {
-    try {
-        const rooms = await prisma.room.findMany()
-
-        return addCorsHeaders(NextResponse.json(rooms))
-
-        // return res.status(200).json(rooms)
-    }
-    catch (err: any) {
-        console.error("Error (BE: Could not fetch Rooms): ", err.message, err)
-        return addCorsHeaders(NextResponse.json(
-            { error: err.message },
-            { status: 500 }
-        ))
-    }
+    const { searchParams } = new URL(req.url)
+    const roomName = searchParams.get("roomName")
+    const roomPassword = searchParams.get("roomName")
 }
 
+
+// export async function GET(req: NextRequest) {
+//     try {
+//         const rooms = await prisma.room.findMany()
+
+//         return addCorsHeaders(NextResponse.json(rooms))
+//     }
+//     catch (err: any) {
+//         console.error("Error (BE: Could not fetch Rooms): ", err.message, err)
+//         return addCorsHeaders(NextResponse.json(
+//             { error: err.message },
+//             { status: 500 }
+//         ))
+//     }
+// }
+
+// POST: Create a new room
 export async function POST(req: NextRequest) {
     try {
-        // await NextCors(req, {
-        //     origin: '*',
-        //     methods: ['GET', 'POST'],
-        //     headers: ['Content-Type', 'Authorization']
-        // })
-
         const body = await req.json();
         const { roomName, roomPassword } = body;
 

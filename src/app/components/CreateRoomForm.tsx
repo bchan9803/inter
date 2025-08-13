@@ -21,7 +21,7 @@ const CreateRoomForm = () => {
             setRoomPassword(roomPassword);
         } else {
             const data = await res.json();
-            console.error("ChatRoom POST failed!", await res.text());
+            console.error("ChatRoom POST failed!", data);
         }
     };
     return (

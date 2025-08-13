@@ -12,17 +12,17 @@ const JoinRoomForm = () => {
         const res = await fetch("/api/room", {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ roomName, roomPassword }),
+            // body: JSON.stringify({ roomName, roomPassword }),
         });
 
         if (res.ok) {
             // setRoomName("");
             // setRoomPassword("");
             // console.log("res: ", res);
-            console.log("room found!");
+            console.log("room found operation successful!");
         } else {
             const data = await res.json();
-            console.error("room not found!");
+            console.error("room found operation not successful!");
         }
     };
     return (
