@@ -6,20 +6,16 @@ function addCorsHeaders(res: NextResponse) {
     res.headers.set("Access-Control-Allow-Origin", '*')
     res.headers.set("Access-Control-Allow-Methods", "GET, POST")
     res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return res
 }
 
 export async function GET(req: NextRequest) {
     try {
-        // await NextCors(req, {
-        //     origin: '*',
-        //     methods: ['GET', 'POST'],
-        //     headers: ['Content-Type', 'Authorization']
-        // })
-
         const rooms = await prisma.room.findMany()
-        const res =  NextResponse.json(rooms)
 
-        return addCorsHeaders(res)
+        return addCorsHeaders(NextResponse.json(rooms))
+
+        // return res.status(200).json(rooms)
     }
     catch (err: any) {
         console.error("Error (BE: Could not fetch Rooms): ", err.message, err)
@@ -39,12 +35,20 @@ export async function POST(req: NextRequest) {
         // })
 
         const body = await req.json();
-        const { roomName, users } = body;
+        const { roomName, roomPassword } = body;
+
+        if (!roomName || !roomPassword) {
+            return addCorsHeaders(
+                NextResponse.json(
+                    { error: "Missing roomName and/or roomPassword" },
+                    { status: 400 }
+            ))
+        }
 
         const newRoom = await prisma.room.create({
             data: {
                 roomName,
-                users
+                roomPassword
             }
         })
 

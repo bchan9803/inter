@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { NextResponse } from "next/server";
 // import { prisma } from "../../../lib/prisma";
 // import { useState } from "react";
@@ -33,9 +34,14 @@ const Rooms = () => {
                     Fetch prisma data
                 </button>
 
-                <button className="bg-slate-200 border-2 border-black p-4">
+                <Link className="bg-slate-200 border-2 border-black p-4" href={"/joinRoom"}>
+                    Join Room
+                </Link>
+
+                <Link className="bg-slate-200 border-2 border-black p-4" href={"/createRoom"}>
                     Create Room
-                </button>
+                </Link>
+                
             </span>
         </main>
     );

@@ -19,21 +19,43 @@ datasource db {
 // TODO: Complete models of Room and Msg
 //
 
-// Room // 
 model Room {
-  id       Int      @id @default(autoincrement())
-  roomName String
-  users    String[]
-  //  msgs  Msg[]
+  id           Int    @id @default(autoincrement())
+  roomName     String
+  roomPassword String
+
+  @@unique([roomName, roomPassword])
 }
 
-// Msg //
+// model User {
+//   id          Int          @id @default(autoincrement())
+//   email       String       @unique
+//   username    String       @unique
+//   msgs        Msg[]
+//   ownedRooms  ChatRoom[]
+//   joinedRooms JoinedRoom[]
+// }
+
+// model JoinedRoom {
+//   id       Int      @id @default(autoincrement())
+//   joinedAt DateTime @default(now())
+//   roomName String
+// }
+
+// model ChatRoom {
+//   id           Int      @id @default(autoincrement())
+//   roomName     String
+//   roomPassword String
+//   users        String[]
+//   msgs         Msg[]
+// }
+
 // model Msg {
-//   id       Int     @id @default(autoincrement())
-//   user     String
-//   msg_date String
-//   msg_time String
-//   msg      String
-//   Room   Room? @relation(fields: [roomId], references: [id])
-//   roomId Int?
+//   id         Int    @id @default(autoincrement())
+//   user       String
+//   msg_date   String
+//   msg_time   String
+//   msgContent String
+//   room       ChatRoom?  @relation(fields: [roomId], references: [id])
+//   roomId     Int?
 // }
