@@ -9,20 +9,24 @@ const JoinRoomForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const res = await fetch("/api/room", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            // body: JSON.stringify({ roomName, roomPassword }),
-        });
-
+        const res = await fetch(
+            `/api/room?roomName=${encodeURIComponent(
+                roomName
+            )}&roomPassword=${encodeURIComponent(roomPassword)}`
+        );
+        
         if (res.ok) {
-            // setRoomName("");
-            // setRoomPassword("");
-            // console.log("res: ", res);
-            console.log("room found operation successful!");
+            console.log("joinRoomForm operation successful!");
+            
+            const data = await res.json()
+
+            if (data.exists) {
+                console.log('room is found!')
+            } else {
+                console.log('room not found!')
+            }
         } else {
-            const data = await res.json();
-            console.error("room found operation not successful!");
+            console.error("ERROR: joinRoomForm operation not successful!");
         }
     };
     return (

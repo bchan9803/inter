@@ -12,7 +12,24 @@ function addCorsHeaders(res: NextResponse) {
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const roomName = searchParams.get("roomName")
-    const roomPassword = searchParams.get("roomName")
+    const roomPassword = searchParams.get("roomPassword")
+
+    if (!roomName || !roomPassword) {
+        return NextResponse.json(
+            { error: "Missing roomName or roomPassword" },
+            { status: 400}
+        )
+    }
+
+    const room = await prisma.room.findUnique({
+        where: { roomName_roomPassword: { roomName, roomPassword } }
+    })
+
+    if (room) {
+        return NextResponse.json({ exists: true, room })
+    } else {
+        return NextResponse.json({ exists: false })
+    }
 }
 
 
