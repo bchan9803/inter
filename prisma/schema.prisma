@@ -18,23 +18,21 @@ datasource db {
 //
 // TODO: Complete models of Room and Msg
 //
+model User {
+  id          String   @id @default(cuid())
+  username    String
+  dateJoined  DateTime
+  roomsJoined String[]
+}
 
 model Room {
-  id           String    @id @default(cuid())
+  id           String @id @default(cuid())
   roomName     String
   roomPassword String
 
   @@unique([roomName, roomPassword])
 }
 
-// model User {
-//   id          Int          @id @default(autoincrement())
-//   email       String       @unique
-//   username    String       @unique
-//   msgs        Msg[]
-//   ownedRooms  ChatRoom[]
-//   joinedRooms JoinedRoom[]
-// }
 
 // model JoinedRoom {
 //   id       Int      @id @default(autoincrement())

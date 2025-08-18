@@ -26,41 +26,6 @@ const LoginForm = () => {
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    // const [authing, setAuthing] = useState(false);
-    // const [error, setError] = useState("");
-    // const router = useRouter();
-
-    // const signInWithGoogle = async () => {
-    //     setAuthing(true);
-
-    //     signInWithPopup(auth, new GoogleAuthProvider())
-    //         .then((res) => {
-    //             console.log(res.user.uid);
-    //             router.push("/");
-    //         })
-    //         .catch((err) => {
-    //             console.error(err);
-    //             setAuthing(false);
-    //         });
-    // };
-
-    // const loginWithEmailAndPassword = async () => {
-    //     setAuthing(true);
-    //     setError("");
-
-    //     signInWithEmailAndPassword(auth, email, password)
-    //         .then((res) => {
-    //             console.log(res.user.uid);
-    //             router.push("/");
-    //         })
-    //         .catch((err) => {
-    //             console.error(err);
-    //             setError(err.message);
-    //             setAuthing(false);
-    //         });
-    //     setAuthing(false);
-    // };
-
     function onGoogleSignIn(e: React.FormEvent) {
         e.preventDefault();
         if (!isSigningIn) {
@@ -71,10 +36,35 @@ const LoginForm = () => {
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+        //     err.code === "auth/invalid-credential" ||
+        //     err.code === "auth/wrong-password"
+        // ) {
+        //     alert("Invalid email or password. Please try again.");
+        // } else if (err.code === "auth/user-not-found") {
+        //     alert("User not found. Please check your email or register.");
+        // } else {
+        //     alert("Login failed! Please try again.");
+        //     console.error("Login error: ", err);
+        // }
+
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        loginWithEmailAndPassword(email, password);
+        try {
+            await loginWithEmailAndPassword(email, password);
+        } catch (err) {
+            if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
+                alert("Invalid email/password.")
+            } else if (err.code === "auth/user-not-found") {
+                alert("User not found.")
+            } else {
+                alert("Login failed! Please try again.")
+                console.error(err)
+            }
+        }
 
         console.log(`form data: ${email} and ${password}`);
     };

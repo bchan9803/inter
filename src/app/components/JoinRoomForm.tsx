@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const JoinRoomForm = () => {
+    const router = useRouter();
     const [roomName, setRoomName] = useState("");
     const [roomPassword, setRoomPassword] = useState("");
 
@@ -22,8 +24,11 @@ const JoinRoomForm = () => {
 
             if (data.exists) {
                 console.log('room is found!')
+                router.push('/msg')
             } else {
                 console.log('room not found!')
+                alert('Room not found! Please try again.')
+                // router.push('/testRoomDenied')
             }
         } else {
             console.error("ERROR: joinRoomForm operation not successful!");

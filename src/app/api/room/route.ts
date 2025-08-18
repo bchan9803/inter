@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "../../../../lib/prisma";
+import { redirect } from "next/navigation";
 
 function addCorsHeaders(res: NextResponse) {
     res.headers.set("Access-Control-Allow-Origin", '*')
@@ -26,27 +27,13 @@ export async function GET(req: NextRequest) {
     })
 
     if (room) {
+        // redirect('/testRoomAllowed')
         return NextResponse.json({ exists: true, room })
     } else {
+        // redirect('/testRoomDenied')
         return NextResponse.json({ exists: false })
     }
 }
-
-
-// export async function GET(req: NextRequest) {
-//     try {
-//         const rooms = await prisma.room.findMany()
-
-//         return addCorsHeaders(NextResponse.json(rooms))
-//     }
-//     catch (err: any) {
-//         console.error("Error (BE: Could not fetch Rooms): ", err.message, err)
-//         return addCorsHeaders(NextResponse.json(
-//             { error: err.message },
-//             { status: 500 }
-//         ))
-//     }
-// }
 
 // POST: Create a new room
 export async function POST(req: NextRequest) {

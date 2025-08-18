@@ -18,17 +18,30 @@ import {
 */
 
 const SignupForm = () => {
+    const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    // const [authing, setAuthing] = useState(false);
-    // const [error, setError] = useState("");
 
-    // const router = useRouter();
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const dateJoined = new Date()
+
+        const res = await fetch("/api/user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, dateJoined })
+        })
+
+        if (res.ok) {
+            setUsername(username)
+            console.log("Create username successful!")
+        } else {
+            const data = await res.json()
+            console.error("Create username failed: ", data)
+        }
 
         signUpWithEmailAndPassword(email, password, confirmPassword);
 
@@ -41,11 +54,25 @@ const SignupForm = () => {
             onSubmit={handleSubmit}
         >
             <h4 className="font-semibold text-4xl">Sign Up</h4>
+            <label htmlFor="signupUsername" className="font-semibold">
+                Username
+            </label>
+            <br />
+            <input
+                type="text"
+                id="signupUsername"
+                name="signupUsername"
+                placeholder="Username"
+                className="p-2 bg-gray-100 rounded-lg"
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            <br />
+
             {/* 
                 email input
             */}
             <br />
-            <label htmlFor="loginEmail" className="font-semibold">
+            <label htmlFor="signupEmail" className="font-semibold">
                 Email
             </label>
             <br />
