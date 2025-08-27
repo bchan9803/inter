@@ -18,35 +18,91 @@ import {
 */
 
 const SignupForm = () => {
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        let firebaseUID: string;
 
-        const dateJoined = new Date()
+        // TODO: fix so that the prisma DB can take in the firebase UID
 
-        const res = await fetch("/api/user", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, dateJoined })
-        })
+        // create new user thru Firebase
+        try {
+            e.preventDefault();
 
-        if (res.ok) {
-            setUsername(username)
-            console.log("Create username successful!")
-        } else {
-            const data = await res.json()
-            console.error("Create username failed: ", data)
+            const userCredential = await signUpWithEmailAndPassword(
+                email,
+                password
+            );
+            const user = userCredential.user;
+            firebaseUID = user.uid;
+
+            console.log("UID: ", firebaseUID);
+            console.log(`form data: ${email} and ${password}`);
+        } catch (err: any) {
+            console.error(err);
+            return;
         }
 
-        signUpWithEmailAndPassword(email, password, confirmPassword);
+        // const dateJoinedTimestamp: String = new Date().getTime().toString();
 
-        console.log(`form data: ${email} and ${password}`);
+        // add username to DB
+        if (firebaseUID) {
+            try {
+                const res = await fetch("/api/user", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        firebaseUID,
+                        username,
+                        // dateJoined: dateJoinedTimestamp,
+                        // dateJoined: new Date().getTime(),
+                    }),
+                });
+
+                if (res.ok) {
+                    setUsername(username);
+                    console.log("Create username successful!");
+                } else {
+                    const data = await res.json();
+                    console.error("Create username failed: ", data);
+                }
+            } catch (err: any) {
+                console.error(err);
+            }
+        } else {
+            alert("Firebase UID not found!");
+        }
+
+        // console.log(`form data: ${email} and ${password}`);
     };
+
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+
+    //     const dateJoined = new Date();
+
+    //     const res = await fetch("/api/user", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({ username, dateJoined }),
+    //     });
+
+    //     if (res.ok) {
+    //         setUsername(username);
+    //         console.log("Create username successful!");
+    //     } else {
+    //         const data = await res.json();
+    //         console.error("Create username failed: ", data);
+    //     }
+
+    //     signUpWithEmailAndPassword(email, password, confirmPassword);
+
+    //     console.log(`form data: ${email} and ${password}`);
+    // };
 
     return (
         <form

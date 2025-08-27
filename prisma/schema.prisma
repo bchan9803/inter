@@ -1,13 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// boilerplate //
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,45 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//
-// TODO: Complete models of Room and Msg
-//
 model User {
-  id          String   @id @default(cuid())
-  username    String
-  dateJoined  DateTime
+  firebaseUID String   @id
+  username    String   @unique
+  // dateJoined  String?
   roomsJoined String[]
 }
 
 model Room {
-  id           String @id @default(cuid())
+  id           String   @id @default(cuid())
   roomName     String
   roomPassword String
+  users        String[]
 
   @@unique([roomName, roomPassword])
 }
-
-
-// model JoinedRoom {
-//   id       Int      @id @default(autoincrement())
-//   joinedAt DateTime @default(now())
-//   roomName String
-// }
-
-// model ChatRoom {
-//   id           Int      @id @default(autoincrement())
-//   roomName     String
-//   roomPassword String
-//   users        String[]
-//   msgs         Msg[]
-// }
-
-// model Msg {
-//   id         Int    @id @default(autoincrement())
-//   user       String
-//   msg_date   String
-//   msg_time   String
-//   msgContent String
-//   room       ChatRoom?  @relation(fields: [roomId], references: [id])
-//   roomId     Int?
-// }

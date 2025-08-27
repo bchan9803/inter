@@ -15,7 +15,7 @@ function addCorsHeaders(res: NextResponse) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { username, dateJoined } = body;
+        const { firebaseUID, username } = body;
 
         if (!username) {
             return addCorsHeaders(
@@ -27,11 +27,11 @@ export async function POST(req: NextRequest) {
         }
 
         const newUser = await prisma.user.create({
-            data: { username, dateJoined },
+            data: { firebaseUID, username },
         });
 
         const res = NextResponse.json(newUser);
-
+1
         return addCorsHeaders(res);
     } catch (err: any) {
         console.error("Error creating new user (BE: Could not create user): ", err.message, err)
