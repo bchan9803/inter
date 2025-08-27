@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { roomName, roomPassword } = body;
+        const { roomName, roomPassword, users } = body;
 
         if (!roomName || !roomPassword) {
             return addCorsHeaders(
@@ -52,7 +52,8 @@ export async function POST(req: NextRequest) {
         const newRoom = await prisma.room.create({
             data: {
                 roomName,
-                roomPassword
+                roomPassword,
+                users
             }
         })
 

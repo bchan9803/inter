@@ -11,6 +11,46 @@ function addCorsHeaders(res: NextResponse) {
     return res;
 }
 
+
+// GET: Fetch user given firebaseUID
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url)
+        const firebaseUID = searchParams.get("firebaseUID")
+
+        if (!firebaseUID) {
+            return NextResponse.json(
+                { error: "Missing firebaseUID."},
+                { status: 400 }
+            )
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { firebaseUID: firebaseUID }
+        })
+
+        if (!user) {
+            return NextResponse.json(
+                { error: "User not found."},
+                { status: 404 }
+            )
+        }
+
+        return NextResponse.json(
+            { success: true, user },
+            { status: 200 }
+        )
+
+    } catch (err: any) {
+        console.error("Error: Could not fetch user.")
+        return addCorsHeaders(NextResponse.json(
+            { error: err.message },
+            { status: 500 }
+        ))
+    }
+}
+
+
 // POST: Create user
 export async function POST(req: NextRequest) {
     try {
