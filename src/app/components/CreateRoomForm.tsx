@@ -1,25 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { useAuthContext } from "../contexts/authContext";
 
 const CreateRoomForm = () => {
+    const { userLoggedIn, currentUser} = useAuthContext();
+    
     const [roomName, setRoomName] = useState("");
     const [roomPassword, setRoomPassword] = useState("");
-    // const [roomUsers, setRoomUsers] = useState("");
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("new room created!");
 
         /// for user API
-        const testFirebaseUID = 'jI4udv6x1wMdnPK3Z11mCAsUjF33'
-        const userRes = await fetch(`/api/user?firebaseUID=${testFirebaseUID}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
+        /*
+            TODO: fetch firebaseUID
+        */
+    
+        // const name = currentUser?.displayName || currentUser?.email || "User";
+
+        const testFirebaseUID = currentUser.uid;
+
+
+        // const testFirebaseUID = "jI4udv6x1wMdnPK3Z11mCAsUjF33";
+        const userRes = await fetch(
+            `/api/user?firebaseUID=${testFirebaseUID}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             }
-        })
+        );
         const userData = await userRes.json();
-        const roomUsers = [userData.user.username]
+        const roomUsers = [userData.user.username];
         console.log("username_a: ", roomUsers);
         ///
 
@@ -29,7 +44,7 @@ const CreateRoomForm = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ roomName, roomPassword, users: roomUsers }),
         });
-        const roomData = await roomRes.json()
+        const roomData = await roomRes.json();
 
         if (roomRes.ok) {
             setRoomName(roomName);

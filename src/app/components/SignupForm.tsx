@@ -46,7 +46,7 @@ const SignupForm = () => {
             console.error(err);
             return;
         }
-
+1
         // const dateJoinedTimestamp: String = new Date().getTime().toString();
 
         // add username to DB

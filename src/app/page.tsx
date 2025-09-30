@@ -3,15 +3,55 @@
 import Link from "next/link";
 // import HomeMsgPreview from "./components/HomeMsgPreview";
 import { useAuthContext } from "./contexts/authContext";
-
+import { useEffect, useState } from "react";
 
 export default function Home() {
+    const [name, setName] = useState("User");
+    const [isUsernameLoading, setIsUsernameLoading] = useState(false);
     const { userLoggedIn, currentUser, loading } = useAuthContext();
 
-    if (loading) return <p>Loading...</p>
+    if (loading) return <p>Loading...</p>;
 
-    const name = currentUser?.displayName || currentUser?.email || "User";
+    // let name = "User";
 
+    useEffect(() => {
+        // const fetchUsername = async () => {
+        //     const uidTT = currentUser?.uid;
+
+        //     const usernameResTT = await fetch(`/api/user?firebaseUID=${uidTT}`);
+        //     const usernameDataTT = await usernameResTT.json();
+
+        //     console.log("usernameDataTT: ", usernameDataTT);
+
+        //     name = usernameDataTT.user.username;
+        // };
+
+        const fetchUsername = async () => {
+            if (currentUser) {
+                try {
+                    setIsUsernameLoading(true);
+                    const uidTT = currentUser?.uid;
+                    const usernameResTT = await fetch(
+                        `/api/user?firebaseUID=${uidTT}`
+                    );
+                    const usernameDataTT = await usernameResTT.json();
+
+                    console.log("usernameDataTT: ", usernameDataTT);
+
+                    setName(usernameDataTT.user.username);
+                } catch (err) {
+                    console.error(
+                        "Error while fetching username from UID: ",
+                        err
+                    );
+                } finally {
+                    setIsUsernameLoading(false);
+                }
+            }
+        };
+
+        fetchUsername();
+    }, [currentUser]);
 
     return (
         <main className="flex flex-col ">
@@ -20,7 +60,7 @@ export default function Home() {
             </h1>
 
             {/* <span className="border-2 border-red-600 px-8"> */}
-                {/* <HomeMsgPreview /> */}
+            {/* <HomeMsgPreview /> */}
             {/* </span> */}
 
             <Link
@@ -29,7 +69,6 @@ export default function Home() {
             >
                 New Message
             </Link>
-
 
             <Link
                 href="/rooms"
