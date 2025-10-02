@@ -4,64 +4,19 @@ import Link from "next/link";
 // import HomeMsgPreview from "./components/HomeMsgPreview";
 import { useAuthContext } from "./contexts/authContext";
 import { useEffect, useState } from "react";
+import useFetchUsername from "./hooks/useFetchUsername";
 
 export default function Home() {
-    const [name, setName] = useState("User");
-    const [isUsernameLoading, setIsUsernameLoading] = useState(false);
-    const { userLoggedIn, currentUser, loading } = useAuthContext();
+    const { name, isUsernameLoading, userLoggedIn, currentUser, loading } =
+        useFetchUsername();
 
     if (loading) return <p>Loading...</p>;
-
-    // let name = "User";
-
-    useEffect(() => {
-        // const fetchUsername = async () => {
-        //     const uidTT = currentUser?.uid;
-
-        //     const usernameResTT = await fetch(`/api/user?firebaseUID=${uidTT}`);
-        //     const usernameDataTT = await usernameResTT.json();
-
-        //     console.log("usernameDataTT: ", usernameDataTT);
-
-        //     name = usernameDataTT.user.username;
-        // };
-
-        const fetchUsername = async () => {
-            if (currentUser) {
-                try {
-                    setIsUsernameLoading(true);
-                    const uidTT = currentUser?.uid;
-                    const usernameResTT = await fetch(
-                        `/api/user?firebaseUID=${uidTT}`
-                    );
-                    const usernameDataTT = await usernameResTT.json();
-
-                    console.log("usernameDataTT: ", usernameDataTT);
-
-                    setName(usernameDataTT.user.username);
-                } catch (err) {
-                    console.error(
-                        "Error while fetching username from UID: ",
-                        err
-                    );
-                } finally {
-                    setIsUsernameLoading(false);
-                }
-            }
-        };
-
-        fetchUsername();
-    }, [currentUser]);
 
     return (
         <main className="flex flex-col ">
             <h1 className="text-3xl font-semibold flex gap-2">
                 Welcome {userLoggedIn ? <p>{name}</p> : <p>Not logged in</p>}
             </h1>
-
-            {/* <span className="border-2 border-red-600 px-8"> */}
-            {/* <HomeMsgPreview /> */}
-            {/* </span> */}
 
             <Link
                 href="/msg"

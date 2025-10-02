@@ -46,7 +46,7 @@ const SignupForm = () => {
             console.error(err);
             return;
         }
-1
+
         // const dateJoinedTimestamp: String = new Date().getTime().toString();
 
         // add username to DB
@@ -79,30 +79,6 @@ const SignupForm = () => {
 
         // console.log(`form data: ${email} and ${password}`);
     };
-
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-
-    //     const dateJoined = new Date();
-
-    //     const res = await fetch("/api/user", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ username, dateJoined }),
-    //     });
-
-    //     if (res.ok) {
-    //         setUsername(username);
-    //         console.log("Create username successful!");
-    //     } else {
-    //         const data = await res.json();
-    //         console.error("Create username failed: ", data);
-    //     }
-
-    //     signUpWithEmailAndPassword(email, password, confirmPassword);
-
-    //     console.log(`form data: ${email} and ${password}`);
-    // };
 
     return (
         <form

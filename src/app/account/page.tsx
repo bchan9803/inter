@@ -2,16 +2,22 @@
 
 import { logout } from "../../../firebase/firebaseAuth";
 import { useAuthContext } from "../contexts/authContext";
+import useFetchUsername from "../hooks/useFetchUsername";
 
 const Account = () => {
     // const accountUser = "bchan32";
     // const accountEmail = "bchan9803@gmail.com";
-    const accountDate = "09/08/2003";
+    const accountDate = "00/00/0000";
 
-    const { userLoggedIn, currentUser } = useAuthContext();
-    const accountUser = currentUser?.displayName || currentUser?.email || "User";
-    const accountEmail = currentUser?.email || "User"
+    const { name, userLoggedIn, currentUser } = useFetchUsername();
 
+    1
+    
+    const accountUser = name || currentUser?.email;
+    const accountEmail = currentUser?.email;
+
+    // const accountUser = currentUser?.displayName || currentUser?.email || "User";
+    // const accountEmail = currentUser?.email || "User";
 
     return (
         <main>
